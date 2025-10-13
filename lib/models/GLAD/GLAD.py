@@ -19,8 +19,8 @@ from lib.utils.torch_utils import is_torch_bf16_available
 from .ViTMAE import build_transformer_base, build_transformer_large
 
 
-class DFTrack(nn.Module):
-    """ This is the base class for DFTrack(Employ Diffusion Feature for Vision-Language Tracking) """
+class GLAD(nn.Module):
+    """ This is the base class for GLAD(Employ Diffusion Feature for Vision-Language Tracking) """
     def __init__(self, 
                  clip_model, 
                  diffusion_block, 
@@ -162,7 +162,7 @@ class DFTrack(nn.Module):
 
         # Decoder Fusion of latent_features
         for idx in range(len(self.fd)):
-            image_features = self.fd[idx](image_features.half(), latent=pooled_latent_features[idx], context=None)
+            image_features = self.fd[idx](image_features, latent=pooled_latent_features[idx], context=None)
             if self.check_nan_tensor:
                 self.check_nan(image_features, f"Fusion Decoder - {idx+1}")
 
@@ -400,12 +400,12 @@ def build_pipeline_mae_base(cfg, precision='fp16', check_nan_tensor=True):
 
     clip_model = (image_encoder,)
 
-    if cfg.DIFF_PRETRAIN_ID:
+    if cfg.MODEL.DIFF_PRETRAIN_ID:
         diff_pretrained = os.path.join(pretrained_path, cfg.MODEL.DIFF_PRETRAIN_ID)
     else:
         diff_pretrained = ''
 
-    if cfg.DIFF_PRETRAIN_ID:
+    if cfg.MODEL.LCM_ID:
         lcm_pretrained = os.path.join(pretrained_path, cfg.MODEL.LCM_ID)
     else:
         lcm_pretrained = ''
@@ -427,7 +427,7 @@ def build_pipeline_mae_base(cfg, precision='fp16', check_nan_tensor=True):
     head = build_box_head(cfg)
 
     # build pipeline
-    pipeline = DFTrack(clip_model, diffusion_block, pooling_modules, fusion_decoders, head, cfg.MODEL.HEAD_TYPE, 
+    pipeline = GLAD(clip_model, diffusion_block, pooling_modules, fusion_decoders, head, cfg.MODEL.HEAD_TYPE, 
                        text_dim=768, image_dim=cfg.MODEL.HIDDEN_DIM, img_size=cfg.DATA.SEARCH.SIZE, 
                        precision=precision, check_nan_tensor=check_nan_tensor)
 
@@ -455,12 +455,12 @@ def build_pipeline_mae_large(cfg, precision='fp16', check_nan_tensor=True):
 
     clip_model = (image_encoder,)
 
-    if cfg.DIFF_PRETRAIN_ID:
+    if cfg.MODEL.DIFF_PRETRAIN_ID:
         diff_pretrained = os.path.join(pretrained_path, cfg.MODEL.DIFF_PRETRAIN_ID)
     else:
         diff_pretrained = ''
 
-    if cfg.DIFF_PRETRAIN_ID:
+    if cfg.MODEL.LCM_ID:
         lcm_pretrained = os.path.join(pretrained_path, cfg.MODEL.LCM_ID)
     else:
         lcm_pretrained = ''
@@ -481,7 +481,7 @@ def build_pipeline_mae_large(cfg, precision='fp16', check_nan_tensor=True):
     head = build_box_head_large(cfg)
 
     # build pipeline
-    pipeline = DFTrack(clip_model, diffusion_block, pooling_modules, fusion_decoders, head, cfg.MODEL.HEAD_TYPE, 
+    pipeline = GLAD(clip_model, diffusion_block, pooling_modules, fusion_decoders, head, cfg.MODEL.HEAD_TYPE, 
                        text_dim=768, image_dim=cfg.MODEL.HIDDEN_DIM, img_size=cfg.DATA.SEARCH.SIZE, 
                        precision=precision, check_nan_tensor=check_nan_tensor)
 

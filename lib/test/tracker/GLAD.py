@@ -27,18 +27,21 @@ class GLAD(BaseTracker):
         super(GLAD, self).__init__(params)
         self.dataset_name = dataset_name
 
+        # import pdb
+        # pdb.set_trace()
         # pipeline loading
-        network = build_pipeline(params.cfg, precision='fp16', check_nan_tensor=False)
+        # network = build_pipeline(params.cfg, precision='fp16', check_nan_tensor=False)
+        network = build_pipeline(params.cfg, precision='bf16', check_nan_tensor=False)
         # network.load_state_dict(torch.load(self.params.checkpoint, map_location='cpu'), strict=True)
         network.load_state_dict(torch.load(self.params.checkpoint, map_location='cpu')['net'], strict=True)
 
         self.cfg = params.cfg
         # Move network(image_model, pooling_modules, fusion_decoders, head) to cuda, together with text_model and sd_model
         self.network = network.cuda()
-        self.network.text_model[0].to("cuda")
+        # self.network.text_model[0].to("cuda")
         self.network.sd_model.to("cuda")
         # set evaluation mode for text_model and sd_model
-        self.network.text_model[0].eval()
+        # self.network.text_model[0].eval()
         self.network.sd_model.vae.eval()
         self.network.sd_model.text_encoder.eval()
         self.network.sd_model.unet.eval()
@@ -49,7 +52,8 @@ class GLAD(BaseTracker):
         else:
             print('Use random seed.')
         # convert to fp16
-        self.network.half()
+        # self.network.half()
+        self.network.bfloat16()
         # change to eval mode
         self.network.eval()
         self.attn_weights = []
@@ -83,7 +87,10 @@ class GLAD(BaseTracker):
         self.text = info['init_nlp']
 
         with torch.no_grad():
-            self.network.set_template_text(self.template, self.text)
+            try:
+                self.network.set_template_text(self.template, self.text)
+            except Exception as e:
+                print(e)
         
         # print("Initialized!")
 
@@ -103,7 +110,10 @@ class GLAD(BaseTracker):
         search = self.preprocessor.process(x_patch_arr)
 
         with torch.no_grad():
-            out_dict, _ = self.network.forward_test(search)
+            try:
+                out_dict, _ = self.network.forward_test(self.template, search)
+            except Exception as e:
+                print(e)
 
         # add hann windows for CENTER head
         pred_score_map = out_dict['score_map']
