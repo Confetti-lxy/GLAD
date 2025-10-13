@@ -4,46 +4,33 @@ A Baseline Implementation to Employ Diffusion Feature for Vision-Language Tracki
 
 # GLAD: Generative Language-Assisted Visual Tracking for Low-Semantic Templates
 
-> [Xingyu Luo](https://scholar.google.com.hk/citations?user=NqXtIPIAAAAJ),  [Yidong Cai](https://huuuuusy.github.io/), [Jie Liu](https://github.com/Xuchen-Li), [Jie Tang](https://scholar.google.com.hk/citations?user=ApH4wOcAAAAJ), [Gangshan Wu](https://scholar.google.com.hk/citations?user=fGc7NVAAAAAJ), [Limin Wang](https://github.com/XiaokunFeng/CSTrack)
+> [Xingyu Luo](https://github.com/Confetti-lxy),  [Yidong Cai](https://github.com/dawnyc), [Jie Liu](https://scholar.google.com/citations?user=oab9IRYAAAAJ), [Jie Tang](https://scholar.google.com/citations?user=ENJVDroAAAAJ), [Gangshan Wu](https://mcg.nju.edu.cn/member/gswu/index.html), [Limin Wang](https://scholar.google.com/citations?user=HEuN8PcAAAAJ)
 
 
 [![](https://img.shields.io/badge/GLAD-arXiv%20-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2507.19875)
-[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Xiaokunfeng2022/GLAD)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Confetti/GLAD)
 
-This is an official pytorch implementation of the paper **GLAD: Generative Language-Assisted Visual Tracking
-for Low-Semantic Templates**.
+This is an official pytorch implementation of the paper **GLAD: Generative Language-Assisted Visual Tracking for Low-Semantic Templates**.
 
 
 <!-- ### 🔥 Updates
 
 *   \[8/2025\] **GLAD's** code is available!
-*   \[6/2025\] **GLAD**  is accepted by ICCV25 Highlight! -->
+*   \[6/2025\] **GLAD**  is accepted by  -->
 
 ### 📣 Overview
 #### Our motivation & Core modeling approach
 
-Vision-language tracking aims to locate the target object in the video sequence using a template patch and a language description provided in the initial frame. To achieve
-robust tracking, especially in complex long-term scenarios that reflect real-world conditions as recently highlighted by
-MGIT, it is essential not only to characterize the target features but also to utilize the context features related to the
-target. However, the visual and textual target-context cues
-derived from the initial prompts generally align only with
-the initial target state. Due to their dynamic nature, target states are constantly changing, particularly in complex
-long-term sequences. It is intractable for these cues to continuously guide Vision-Language Trackers (VLTs). Furthermore, for the text prompts with diverse expressions, our
-experiments reveal that existing VLTs struggle to discern
-which words pertain to the target or the context, complicating the utilization of textual cues. 
+Traditional vision-language trackers extract text features and send them directly into fusion stage, connections between text and visual representations are not sufficiently considered for this task. 
+In cases of low-semantic templates, which we consider from the low clarity of the tracking target and the weak relevance to the text description, 
+feature fusion is further hindered, which adversely affects the prediction results and leads to poor performance.
+Besides, the inherent limitations of existing vision-language tracking models, which are predominantly discriminative in nature, relying on feature interaction between the text, template, and search region to generate the final bounding box. As a result, these models typically lack the generative capability to reconstruct or enhance input data.
+
+In light of these challenges, we propose the generative fusion paradigm which focuses on leveraging a generative fusion to bolster compatibility between language and image. In contrast of discriminative models, generative models like Stable Diffusion possess stronger reconstruction abilities and can produce features during the generation process that are otherwise inaccessible to discriminative approaches. These features can act as a form of guidance, helping the model better understand and locate the target object. 
+
 ![GLAD_motivation](asset/motivation.png)
 
-In this work, we present a novel tracker named GLAD, which can obtain multimodal cues Aligned with the dynamic target states
-through comprehensive Target-Context feature modeling,
-thereby achieving robust tracking. Specifically, (1) for the
-visual modality, we propose an effective temporal visual
-target-context modeling approach that provides the tracker
-with timely visual cues. (2) For the textual modality, we
-achieve precise target words identification solely based on
-textual content, and design an innovative context words
-calibration method to adaptively utilize auxiliary context
-words. (3) We conduct extensive experiments on mainstream benchmarks and GLAD achieves a new SOTA
-performance
+Based on this paradigm, we propose a new vision-language tracking method GLAD, which employs diffusion models to perform generative multi-modal fusion. Verified by experiments, our method surpasses most existing state-of-the-art vision-language trackers in terms of both tracking accuracy and inference speed on LaSOT, LaSOT_ext,  TNL2K and OTB99-lang.
 ![GLAD_pipeline](asset/framework.png)
 
 #### Strong performance
@@ -77,6 +64,11 @@ Put these tracking datasets in [./data](data). It should look like:
             |-- test
             |-- train
             |-- val
+        -- OTB2015
+            |-- Basketball
+            |-- Biker
+            |-- Bird1
+            ...
         -- coco
             |-- annotations
             |-- images
@@ -113,8 +105,8 @@ lib/test/evaluation/local.py  # paths about testing
 
 #### Train
 ##### Prepare pretrained backbone
-The backbone and patch embedding of GLAD are initialized with pre-trained weights from [**Fast-iTPN**](https://github.com/sunsmarterjie/iTPN), and we adopt RoBERTa-Base as our text encoder.  
-Please download the **fast_itpn_base_clipl_e1600.pt**, **fast_itpn_large_1600e_1k.pt** and **roberta-base** checkpoints and place them in [./resource/pretrained_models](./resource/pretrained_models).
+The backbone and patch embedding of GLAD are initialized with pre-trained weights from [MAE ViT](https://github.com/facebookresearch/mae), and we adopt text encoder from [SDv1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5) as our text encoder.  
+Please download the **mae_pretrain_vit_base.pth**, **mae_pretrain_vit_large.pth**, **lcm-lora-sdv1-5** and **stable-diffusion-v1-5** checkpoints and place them in [./resource/pretrained_models](./resource/pretrained_models).
 
 ##### Train GLAD
 You can run the following command to train the GLAD-B256:
@@ -155,7 +147,7 @@ python tracking/analysis_results.py --dataset_name otb99 --tracker_param baselin
 ```
 
 ### 📊 Model Zoo
-The trained models, and the raw tracking results are provided in the [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Xiaokunfeng2022/GLAD).
+The trained models, and the raw tracking results are provided in the [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Confetti/GLAD).
 
 
 <!-- ### ❤️Acknowledgement
