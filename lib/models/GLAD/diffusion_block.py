@@ -112,7 +112,7 @@ def load_sub_model(
         importable_classes,
         pipelines,
         is_pipeline_module,
-        component_name='DFTrack',
+        component_name='GLAD',
         cache_dir='lib/models',
     )
 

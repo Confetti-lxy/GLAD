@@ -13,6 +13,9 @@ cfg.MODEL.HEAD_TYPE = "CORNER"
 cfg.MODEL.HIDDEN_DIM = 768
 cfg.MODEL.HEAD_CHANNEL = 256
 cfg.MODEL.HEAD_FREEZE_BN = False
+cfg.MODEL.PRETRAIN_FILE = "mae_pretrain_vit_base.pth"    # for backbone
+cfg.MODEL.DIFF_PRETRAIN_ID = "stable-diffusion-v1-5"
+cfg.MODEL.LCM_ID = "lcm-lora-sdv1-5"
 
 # TRAIN
 cfg.TRAIN = edict()
