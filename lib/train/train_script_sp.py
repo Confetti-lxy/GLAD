@@ -10,9 +10,9 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 # some more advanced functions
 from .base_functions import *
 # network related
-from lib.models.DFTrack import build_dftrack_pipeline
+from lib.models.GLAD import build_pipeline
 # forward propagation related
-from lib.train.actors import DFTrackActor
+from lib.train.actors import GLADActor
 # for import modules
 import importlib
 
@@ -27,7 +27,7 @@ def prepare_input(res):
 
 
 def run(settings):
-    settings.description = 'Training script for DFTrack'
+    settings.description = 'Training script for GLAD'
 
     # update the default configs with config file
     if not os.path.exists(settings.cfg_file):
@@ -55,8 +55,8 @@ def run(settings):
     loader_train, loader_val = build_dataloaders(cfg, settings)
 
     # Create network
-    if settings.script_name == "DFTrack":
-        net = build_dftrack_pipeline(cfg)
+    if settings.script_name == "GLAD":
+        net = build_pipeline(cfg)
         if is_main_process():
             print("building diffusion pipeline for tracking")
     else:
@@ -77,11 +77,11 @@ def run(settings):
     settings.distill_loss_type = getattr(cfg.TRAIN, "DISTILL_LOSS_TYPE", "KL")
     # settings.save_every_epoch = True
     # Loss functions and Actors
-    if settings.script_name == 'DFTrack':
+    if settings.script_name == 'GLAD':
         focal_loss = FocalLoss()
         objective = {'giou': giou_loss, 'l1': l1_loss, 'focal': focal_loss}
         loss_weight = {'giou': cfg.TRAIN.GIOU_WEIGHT, 'l1': cfg.TRAIN.L1_WEIGHT, 'focal': cfg.TRAIN.FOCAL_WEIGHT}
-        actor = DFTrackActor(net=net, objective=objective, loss_weight=loss_weight, settings=settings)
+        actor = GLADActor(net=net, objective=objective, loss_weight=loss_weight, settings=settings)
     else:
         raise ValueError("illegal script name")
 

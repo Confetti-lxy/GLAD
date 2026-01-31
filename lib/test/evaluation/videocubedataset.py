@@ -54,7 +54,7 @@ class VideoCubeDataset(BaseDataset):
 
         ground_truth_rect = load_text(str(anno_path), delimiter=",", dtype=np.float64)
 
-        nlp_path = "/home/luoxingyu/data/caiyidong/DFTrack/lib/test/evaluation/MGIT_nlp/{}.xlsx".format(sequence_name)
+        nlp_path = "GLAD/lib/test/evaluation/MGIT_nlp/{}.xlsx".format(sequence_name)
         nlp_tab = pd.read_excel(nlp_path)
         nlp_rect = nlp_tab.iloc[:, [14]].values
         nlp_rect = nlp_rect[-1, 0]

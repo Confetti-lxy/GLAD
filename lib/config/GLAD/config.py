@@ -3,7 +3,7 @@ import yaml
 
 
 """
-Add default config for DFTrack.
+Add default config for GLAD.
 """
 cfg = edict()
 
