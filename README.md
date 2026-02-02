@@ -13,10 +13,10 @@ A Baseline Implementation to Employ Diffusion Feature for Vision-Language Tracki
 This is an official pytorch implementation of the paper **GLAD: Generative Language-Assisted Visual Tracking for Low-Semantic Templates**.
 
 
-<!-- ### 🔥 Updates
+### 🔥 Updates
 
-*   \[8/2025\] **GLAD's** code is available!
-*   \[6/2025\] **GLAD**  is accepted by  -->
+*   \[2/2026\] **GLAD's** code is available!
+*   \[1/2026\] **GLAD**  is accepted by IJCV(CCF-A)
 
 ### 📣 Overview
 #### Our motivation & Core modeling approach
@@ -106,7 +106,7 @@ lib/test/evaluation/local.py  # paths about testing
 #### Train
 ##### Prepare pretrained backbone
 The backbone and patch embedding of GLAD are initialized with pre-trained weights from [MAE ViT](https://github.com/facebookresearch/mae), and we adopt text encoder from [SDv1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5) as our text encoder.  
-Please download the **mae_pretrain_vit_base.pth**, **mae_pretrain_vit_large.pth**, **lcm-lora-sdv1-5** and **stable-diffusion-v1-5** checkpoints and place them in [./resource/pretrained_models](./resource/pretrained_models).
+Please download the **mae_pretrain_vit_base.pth**, **mae_pretrain_vit_large.pth**, **lcm-lora-sdv1-5** and **stable-diffusion-v1-5** checkpoints and place them in [./resource/pretrained](./resource/pretrained_models).
 
 ##### Train GLAD
 You can run the following command to train the GLAD-B256:
@@ -150,6 +150,6 @@ python tracking/analysis_results.py --dataset_name otb99 --tracker_param baselin
 The trained models, and the raw tracking results are provided in the [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Confetti/GLAD).
 
 
-<!-- ### ❤️Acknowledgement
-We would like to express our gratitude to the following open-source repositories that our work is based on: [SeqtrackV2](https://github.com/chenxin-dlut/SeqTrackv2),  [AQATrack](https://github.com/GXNU-ZhongLab/AQATrack), [Fast-iTPN](https://github.com/sunsmarterjie/iTPN).
-Their contributions have been invaluable to this project. -->
+### ❤️Acknowledgement
+We would like to express our gratitude to the following open-source repositories that our work is based on: [ROMTrack](https://github.com/dawnyc/ROMTrack), [Fast-iTPN](https://github.com/sunsmarterjie/iTPN).
+Their contributions have been invaluable to this project.
