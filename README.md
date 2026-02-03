@@ -7,7 +7,7 @@ A Baseline Implementation to Employ Diffusion Feature for Vision-Language Tracki
 > [Xingyu Luo](https://github.com/Confetti-lxy),  [Yidong Cai](https://github.com/dawnyc), [Jie Liu](https://scholar.google.com/citations?user=oab9IRYAAAAJ), [Jie Tang](https://scholar.google.com/citations?user=ENJVDroAAAAJ), [Gangshan Wu](https://mcg.nju.edu.cn/member/gswu/index.html), [Limin Wang](https://scholar.google.com/citations?user=HEuN8PcAAAAJ)
 
 
-[![](https://img.shields.io/badge/GLAD-arXiv%20-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2507.19875)
+[![](https://img.shields.io/badge/GLAD-arXiv%20-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2602.00570)
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20GLAD-Results&ckpts-red)](https://huggingface.co/Confetti/GLAD)
 
 This is an official pytorch implementation of the paper **GLAD: Generative Language-Assisted Visual Tracking for Low-Semantic Templates**.
