@@ -151,5 +151,5 @@ The trained models, and the raw tracking results are provided in the [![HuggingF
 
 
 ### ❤️Acknowledgement
-We would like to express our gratitude to the following open-source repositories that our work is based on: [ROMTrack](https://github.com/dawnyc/ROMTrack), [Fast-iTPN](https://github.com/sunsmarterjie/iTPN).
+We would like to express our gratitude to the following open-source repositories that our work is based on: [ROMTrack](https://github.com/dawnyc/ROMTrack).
 Their contributions have been invaluable to this project.
