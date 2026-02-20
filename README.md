@@ -153,3 +153,17 @@ The trained models, and the raw tracking results are provided in the [![HuggingF
 ### ❤️Acknowledgement
 We would like to express our gratitude to the following open-source repositories that our work is based on: [ROMTrack](https://github.com/dawnyc/ROMTrack).
 Their contributions have been invaluable to this project.
+
+```
+@article{luo2026glad,
+  title={GLAD: Generative Language-Assisted Visual Tracking for Low-Semantic Templates: X. Luo et al.},
+  author={Luo, Xingyu and Cai, Yidong and Liu, Jie and Tang, Jie and Wu, Gangshan and Wang, Limin},
+  journal={International Journal of Computer Vision},
+  volume={134},
+  number={3},
+  pages={121},
+  year={2026},
+  publisher={Springer}
+}
+
+```
