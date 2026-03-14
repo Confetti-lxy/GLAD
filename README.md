@@ -50,7 +50,7 @@ pip install -r requirements.txt
 ### 🔧 Usage
 
 #### Data Preparation
-Our GLAD is trained on  LaSOT, TNL2K, RefCOCOg, OTB99-Lang, GOT-10k, and TrackingNet datasets.  
+Our GLAD is trained on  LaSOT, TNL2K, RefCOCOg, OTB99-Lang, GOT-10k, VastTrack and TrackingNet datasets.  
 Put these tracking datasets in [./data](data). It should look like:
 
    ```
